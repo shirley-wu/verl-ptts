@@ -1,3 +1,22 @@
+# verl-ptts: verl fork for planner (outline) RL training
+
+This is a fork of [verl](https://github.com/verl-project/verl) (upstream commit `e5f5ea66`) used for the
+planned test-time scaling (PTTS) project: <https://github.com/shirley-wu/planned-test-time-scaling>.
+
+It adds one trainer, `OutlineTrainer` (`verl/trainer/ppo/ray_trainer_outline.py`), enabled with
+`outline.training_component="outline"`. Per prompt, the policy (planner) generates `outline.num_outlines`
+numbered outlines; each outline is executed by a frozen executor model (`outline.frozen_solution_rollout`),
+and the outline's reward is the max correctness over its executor solutions. Everything else is GRPO as in
+upstream verl. Config keys live under `outline:` in `verl/trainer/config/ppo_trainer.yaml`.
+
+Files changed relative to upstream: `verl/trainer/main_ppo.py`, `verl/trainer/config/ppo_trainer.yaml`,
+`verl/trainer/ppo/{ray_trainer_outline.py,outline_utils.py,ray_trainer.py,metric_utils.py}`,
+`verl/experimental/agent_loop/agent_loop.py`.
+
+The original verl README follows.
+
+---
+
 <div align="center">
  👋 Hi, everyone!
     verl is a RL training library initiated by <b>ByteDance Seed team</b> and maintained by the verl community.

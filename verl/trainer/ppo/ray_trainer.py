@@ -408,6 +408,8 @@ class RayPPOTrainer:
         }
 
         for k, v in reward_extra_infos_dict.items():
+            if isinstance(v, np.ndarray):
+                v = v.tolist()
             if len(v) == n:
                 base_data[k] = v
 
