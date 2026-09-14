@@ -318,3 +318,25 @@ ray_kwargs:
 
   # Path to save Ray timeline JSON for performance profiling
   timeline_json_file: null
+
+# Planner (outline) RL training. See verl/trainer/ppo/ray_trainer_outline.py.
+outline:
+  # null = stock verl PPO trainer; "outline" = OutlineTrainer (planner GRPO with a frozen executor)
+  training_component: null
+  # data key holding the planner chat prompt (must equal data.prompt_key)
+  outline_prompt_key: "prompt"
+  # data key holding the executor chat prompt; its user turn contains the literal "{outline}" placeholder
+  solution_prompt_key: "solution_prompt"
+  # max tokens for one planner generation (the N numbered outlines)
+  outline_max_response_length: 4096
+  # reward for a well-formed outline whose executor solutions are all wrong
+  outline_format_reward: 0.0
+  # reward for a planner generation that cannot be parsed into num_outlines outlines
+  outline_failed_reward: 0.0
+  # number of numbered outlines per planner generation ("1. ... N.")
+  num_outlines: 4
+
+  # executor used to score outlines; if disabled the policy itself executes the outlines
+  frozen_solution_rollout:
+    enable: false
+    model_path: null

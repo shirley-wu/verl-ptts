@@ -428,6 +428,11 @@ class AgentLoopWorker:
             sampling_params["top_k"] = config.val_kwargs.top_k
             sampling_params["temperature"] = config.val_kwargs.temperature
 
+        # per-batch sampling overrides (the outline trainer caps planner generations via max_tokens)
+        for key in ["temperature", "max_tokens"]:
+            if key in batch.meta_info:
+                sampling_params[key] = batch.meta_info[key]
+
         # by default, we assume it's a single turn agent
         if "agent_name" not in batch.non_tensor_batch:
             default_agent_loop = config.agent.default_agent_loop
